@@ -204,7 +204,7 @@ public class TaskManagementApp {
         //button remove task
         JButton deletebutton = new JButton("delete");
         deletebutton.setBackground(new Color(231, 76, 60));
-        deletebutton.setForeground(Color.red);
+        deletebutton.setForeground(Color.white);
         deletebutton.setBorderPainted(false);
         deletebutton.setFocusPainted(false);
         //deletebutton.setCursor(Cursor.HAND_CURSOR);
