@@ -148,14 +148,9 @@ public class TaskManagementApp {
             //limit the max tasks to 12
             if(tasks.size()<12){
                 String task = JOptionPane.showInputDialog(frame, "Enter a new task: ", "add task",JOptionPane.PLAIN_MESSAGE);
-                //only allowing non empty tasks
-                if (task != null && !task.isEmpty() && task.trim().equals("")){
-                    tasks.add(task);
-                    updateTaskPanel();
-                }
-                else{
-                    JOptionPane.showMessageDialog(frame, "no contenet in the task!", "Task Empty", JOptionPane.WARNING_MESSAGE);
-                }
+                tasks.add(task);
+                updateTaskPanel();
+               
             }
             
             else{
@@ -189,19 +184,27 @@ public class TaskManagementApp {
         taskPanel.setLayout(new BorderLayout());
         taskPanel.setPreferredSize(new Dimension(240,80));
         taskPanel.setBackground(Color.WHITE);
-        taskPanel.setBorder(new LineBorder(new Color(254,202,87),2));
+        taskPanel.setBorder(new LineBorder(Color.black,1));
         
         JLabel taskLabel = new JLabel(task);
         taskLabel.setHorizontalAlignment(SwingConstants.CENTER);
         taskPanel.add(taskLabel, BorderLayout.CENTER);
         
+        //add mouse listener to task dialog
+        
+        taskPanel.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                showTaskDetails(task);
+            }
+        });
         
         
         
         //button remove task
         JButton deletebutton = new JButton("delete");
         deletebutton.setBackground(new Color(231, 76, 60));
-        deletebutton.setForeground(Color.white);
+        deletebutton.setForeground(Color.red);
         deletebutton.setBorderPainted(false);
         deletebutton.setFocusPainted(false);
         //deletebutton.setCursor(Cursor.HAND_CURSOR);
@@ -217,25 +220,49 @@ public class TaskManagementApp {
         
     }
     
+    //show task details in a custom dialog
+            private void showTaskDetails (String task){
+                CustomDialog customDialog = new CustomDialog(frame, "Task Details", task);
+                customDialog.setVisible(true);
+            }
+    
     
     //create a custom dialog class
     class CustomDialog extends JDialog{
         public CustomDialog(JFrame parent, String title, String content){
             super(parent, title, true);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             setSize(300,200);
             setLocationRelativeTo(null);
             
             JPanel panel = new JPanel(new BorderLayout());
             JTextArea textArea = new JTextArea(content);
+            textArea.setEditable(false);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setFont(new Font("Arial",Font.PLAIN, 17));
             JScrollPane scrollPane = new JScrollPane(textArea);
             panel.add(scrollPane, BorderLayout.CENTER);
             
             JButton closeButton = new JButton ("close");
+            closeButton.setPreferredSize(new Dimension(120,30));
+            closeButton.setFont(new Font("arial", Font.PLAIN, 13));
+            closeButton.setBackground(Color.red);
+            closeButton.setForeground(Color.white);
+            closeButton.setFocusPainted (false);
+            closeButton.setBorderPainted (false);
+
             
             closeButton.addActionListener((e->{
                 dispose();
             }));
+            
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            buttonPanel.add(closeButton);
+            panel.add(buttonPanel, BorderLayout.SOUTH);
+            getContentPane().add(panel);
+            
+            
         }
     }
 
